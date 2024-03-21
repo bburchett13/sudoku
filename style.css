@@ -12,6 +12,19 @@
 
 }
 
+.playableCell {
+
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height:40px;
+    width:40px;
+    border:1px solid black;
+    background-color: white !important;
+
+}
+
 .gameCell {
 
     display: flex; 
@@ -20,8 +33,9 @@
     justify-content: center;
     height:40px;
     width:40px;
-    background-color: white;
-    border:5px solid black;
+    background-color: tan;
+    border:1px solid black;
     /* margin:10px; */
 
 }
+
