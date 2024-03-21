@@ -1,0 +1,27 @@
+.gameContainer {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.gameRow {
+
+    display: flex;
+    flex-direction: row;
+
+}
+
+.gameCell {
+
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height:40px;
+    width:40px;
+    background-color: white;
+    border:5px solid black;
+    /* margin:10px; */
+
+}
