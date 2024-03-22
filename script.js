@@ -1,6 +1,7 @@
 let selectedNum = 1;
 var gameCells = [];
 var gameLayout = [];
+var playableCells = [];
 gameLayout = [5, 3, 4, 6, 7, 8, 9, 1, 2, '', 7, 2, 1, 9, 5, 3, 4, '', 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 console.log(gameLayout.length);
@@ -19,6 +20,7 @@ for (let i = 0; i < 81; i++) {
     if (gameLayout[i] === '') {
 
         gameCells[i].classList.add = 'playableCell';
+        playableCells.push(i);
         gameCells[i].style.backgroundColor = 'white';
         gameCells[i].addEventListener('click', () => {
     
@@ -119,6 +121,17 @@ btnErase.addEventListener('click', () => {
 
 
 });
+let btnClear = document.querySelector("#clear");
+btnClear.addEventListener('click', () => {
+
+    for (i = 0; i < playableCells.length; i++) {
+
+        gameCells[playableCells[i]].innerHTML = '';
+        gameCells[playableCells[i]].style.backgroundColor = 'white';
+
+    }
+
+})
 //#endregion
 
 
