@@ -145,8 +145,9 @@ btnHints.addEventListener('click', () => {
         playerHintsON = true;
         hints.style.borderColor = 'red';
 
-    };
 
+    };
+    colorCells(gameLayout, answer, playableCells, playerHintsON)
 });
 
 
@@ -262,6 +263,44 @@ function colorCell(index, color, playerHintsON) {
 
     
     
+}
+
+function colorCells(gameLayout, answer, playableCells, playerHintsON){
+
+    if (playerHintsON) {
+
+        for (let i = 0; i < playableCells.length; i++) {
+
+            if (gameCells[playableCells[i]].innerHTML === answer[playableCells[i]].toString()){
+    
+                gameCells[playableCells[i]].style.backgroundColor = 'green';
+    
+            }
+            else {
+
+                gameCells[playableCells[i]].style.backgroundColor = 'red';
+
+            }
+            if (gameCells[playableCells[i]].innerHTML === ''){
+
+                gameCells[playableCells[i]].style.backgroundColor = 'white';
+
+            }
+    
+        }
+
+    }
+    else {
+
+        for (let i = 0; i < playableCells.length; i++){
+
+            gameCells[playableCells[i]].style.backgroundColor = 'white';
+
+        }
+
+    }
+
+
 }
 
 let solvingIndex;
