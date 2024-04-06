@@ -1,56 +1,31 @@
 let selectedNum = '';
-var gameCells = [];
-var gameLayout = [];
-var playableCells = [];
-gameLayout = [5, 3, 4, 6, 7, 8, 9, 1, 2, '', 7, 2, 1, 9, 5, 3, 4, '', 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
-var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
+let gameCells = [];
+let gameLayout = [];
+let playableCells = [];
+let hintCells = [];
+let playerHintsON = false;
+let solved = false;
+let counter = 0;
+let counter2 = 0;
+
+//These are my 3 game layout test cases
+// gameLayout = [7, 1, 4, 6, 8, 2, '', 5, '', '', 5, '', 9, 1, 7, 4, 8, 2, '', '', 2, '', '', 5, 1, '', 7, '', 4, 9, 2, 7, '', 5, 3, '', 6, '', 7, '', 9, 8, 2, 1, '', 8, '', '', '', '', '', 6, '', '', '', '', '', 3, '', '', 8, 9, '', 5, '', '', '', '', '', 3, '', '', 4, '', 3, 8, '', '', '', '', 1];
+
+//This game layout should take ~6,000 iterations
+gameLayout = ['', '', '', '', '', 9, '', 5, '', 6, '', 8, '', '', '', 9, '', '', '', 5, 9, '', 8, '', 3, 6, '', '', '', '', 1, '', 2, '', '', '', 2, '', '', '', 4, '', '', '', 1, '', '', '', 7, '', 3, '', '', '', '', 2, 6, '', 5, '', 7, 3, '', '', '', 4, '', '', '', 5, '', 8, '', 9, '', 8, '', '', '', '', ''];
+
+// gameLayout = [1, '', '', '', '', 3, 5, '', 6, '', '', '', '', '', '', 8, '', 7, '', 5, '', 6, '', '', '', '', '', '', '', 6, '', '', 7, '', '', 8, '', '', 8, '', 6, '', 2, '', '', 4, '', '', 9, '', '', 6, '', '', '', '', '', '', '', 4, '', 2, '', 2, '', 4, '', '', '', '', '', '', 9, '', 7, 5, '', '', '', '', 3];
+
+let answer = [];
+// var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 let numberButtons = document.getElementsByClassName('numberButton');
+let hints = document.getElementById("playerHints");
+let row;
+let column;
+let square;
+let squareIndex;
 
-// Create buttons for each cell and provide game logic
-//#region
-for (let i = 0; i < 81; i++) {
-    
-    // Find game cell
-    gameCells[i] = document.getElementsByClassName('gameCell')[i];
-    
-    // create game board using the gameLayout
-    gameCells[i].innerHTML = gameLayout[i];
-
-    // If statement to create button for playable cells and decide what to do when the user puts a number in place
-    if (gameLayout[i] === '') {
-
-        gameCells[i].classList.add = 'playableCell';
-        playableCells.push(i);
-        gameCells[i].style.backgroundColor = 'white';
-        gameCells[i].addEventListener('click', () => {
-    
-            gameCells[i].innerHTML = selectedNum;
-
-            // if wrong, make cell red, if erase, make cell white, if correct, make cell green
-            if (selectedNum !== answer[i] && selectedNum !== '') {
-
-                gameCells[i].style.backgroundColor = 'red';
-
-            }
-            else if (selectedNum === '') {
-
-                gameCells[i].style.backgroundColor = 'white';
-
-            }
-            else {
-
-                gameCells[i].style.backgroundColor = 'green';
-
-            }
-    
-        });
-
-    };
-    
-};
-//#endregion
-
-
+//Number Buttons
 //#region
 let btn1 = document.querySelector("#button1");
 btn1.addEventListener('click', () => {
@@ -140,27 +115,63 @@ btnErase.addEventListener('click', () => {
     resetNumButtons(oldNum, selectedNum);
 
 });
+//#endregion
+
+//Game Settings
+//#region
 let btnClear = document.querySelector("#clear");
 btnClear.addEventListener('click', () => {
 
     for (i = 0; i < playableCells.length; i++) {
 
         gameCells[playableCells[i]].innerHTML = '';
-        gameCells[playableCells[i]].style.backgroundColor = 'white';
+        colorCell(playableCells[i], 'white', playerHintsON);
 
     }
 
 })
-//#endregion
 
+let btnHints = document.querySelector('#playerHints');
+btnHints.addEventListener('click', () => {
+
+    if (playerHintsON) {
+
+        playerHintsON = false;
+        hints.style.borderColor = 'black';
+
+    }
+    else {
+
+        playerHintsON = true;
+        hints.style.borderColor = 'red';
+
+    };
+
+});
+
+
+let solveBtn = document.querySelector('#solve');
+solveBtn.addEventListener('click', () => {
+
+    for (i = 0; i < answer.length; i++) {
+
+        gameCells[i].innerHTML = answer[i];
+
+    };
+
+});
 
 let makeBtn = document.querySelector("#makePuzzle");
 makeBtn.addEventListener('click', () => {
 
-    console.log("Make Puzzle?");
+    makeGame(gameLayout);
+    answer = solve(gameLayout, playableCells);
+    // console.log(answer);
 
 });
+//#endregion
 
+//Function to change number button style to show which one is selected
 function resetNumButtons(oldNum, num) {
 
     if (oldNum === '' && num !== ''){
@@ -187,3 +198,325 @@ function resetNumButtons(oldNum, num) {
     };
 
 };
+
+// Create buttons for each cell and provide game logic
+function makeGame(gameLayout) {
+
+    for (let i = 0; i < gameLayout.length; i++) {
+    
+        // Find game cell
+        gameCells[i] = document.getElementsByClassName('gameCell')[i];
+        
+        // create game board using the gameLayout
+        gameCells[i].innerHTML = gameLayout[i];
+    
+        // If statement to create button for playable cells and decide what to do when the user puts a number in place
+        if (gameLayout[i] === '') {
+    
+            gameCells[i].classList.add = 'playableCell';
+            playableCells.push(i);
+            colorCell(i, 'white', playerHintsON);
+            // gameCells[i].style.backgroundColor = 'white';
+            gameCells[i].addEventListener('click', () => {
+        
+                gameCells[i].innerHTML = selectedNum;
+    
+                // if wrong, make cell red, if erase, make cell white, if correct, make cell green
+                if (selectedNum !== answer[i] && selectedNum !== '') {
+    
+                    colorCell(i, 'red', playerHintsON);
+                    // gameCells[i].style.backgroundColor = 'red';
+    
+                }
+                else if (selectedNum === '') {
+    
+                    colorCell(i, 'white', playerHintsON);
+                    // gameCells[i].style.backgroundColor = 'white';
+    
+                }
+                else {
+    
+                    colorCell(i, 'green', playerHintsON);
+                    // gameCells[i].style.backgroundColor = 'green';
+    
+                }
+        
+            });
+    
+        };
+        
+    };
+
+};
+
+function colorCell(index, color, playerHintsON) {
+    if (playerHintsON) {
+
+            gameCells[index].style.backgroundColor = color;
+
+    }
+    if (color === 'white') {
+
+        gameCells[index].style.backgroundColor = color;
+
+    }
+
+    
+    
+}
+
+let solvingIndex;
+let testNum;
+let solvedCells = [];
+function solve(gameBoard, playableCells) {
+    answer = gameBoard;
+    let maxSolvingIndex = 0;
+    solvingIndex = 0;
+    testNum = 1;
+    while (!solved) {
+        // if (counter2 > 10000){
+        //     console.log('max Solving Index: ', maxSolvingIndex, 'length of playable cells', playableCells.length)
+        //     break;
+
+        // }
+        if (counter2 === 30) {
+
+            console.log('whoa');
+
+        }
+        if (checkIfValid(answer, testNum, playableCells[solvingIndex])) {
+
+            answer[playableCells[solvingIndex]] = testNum;
+            // console.log(answer[playableCells[solvingIndex]]);
+
+            solvingIndex = solvingIndex + 1;
+            if (solvingIndex > maxSolvingIndex) {
+
+                maxSolvingIndex = solvingIndex;
+
+            }
+            testNum = 1;
+            // console.log(playableCells[solvingIndex]);
+
+            if (solvingIndex > playableCells.length-1) {
+
+                solved = true;
+                return answer;
+                
+            }
+        }
+        else {
+
+            testNum += 1;
+
+        }
+        if (testNum > 9) {
+
+            console.log('testNum', testNum, 'solvingIndex', solvingIndex);
+            while (testNum > 9) {
+
+                if (solvingIndex === 1) {
+
+                    answer[playableCells[solvingIndex]] = '';
+                    solvingIndex = 0;
+
+                }
+                else if (solvingIndex === 0) {
+
+                    console.log("this won't work")
+                    break;
+
+                }
+                else {
+
+                    answer[playableCells[solvingIndex]] = '';
+                    solvingIndex = solvingIndex - 1;
+
+                }
+
+                testNum = answer[playableCells[solvingIndex]] + 1;
+                console.log('testNum', testNum, 'solving index', solvingIndex);
+
+                if (solvingIndex < 0) {
+
+                    console.log('impossible');
+                    break;
+    
+                }
+
+            }
+            
+            counter2++;
+            console.log('resets: ', counter2)
+
+
+        };
+    };
+};
+
+function checkIfValid(gameArray, num, index) {
+
+    row = Math.floor(index/9);
+    column = index % 9;
+    square = findSquare(row,column);
+    // console.log('location', row, column, square);
+
+    for (i = 0; i < 9; i++){
+        // console.log(i, column, gameArray[i][column]);
+        //check row
+        if (gameArray[i+(row*9)] === num) {
+        // if (gameArray[row][i] === num) {
+
+            console.log('row', testNum);
+            return false;
+
+        }
+        //check column
+        if (gameArray[column + (i*9)] === num) {
+        // if (gameArray[i][column] === num) {
+
+            console.log('column', testNum);
+            return false;
+
+        }
+ 
+    };
+    //check square
+    if (checkSquare(square, num)) {
+
+        console.log(checkSquare('square', testNum));
+        return false;
+
+    }
+    return true;
+
+
+};
+
+// function to find the 3x3 square that the selected cell is in 
+function findSquare(row, column) {
+
+    // if (row < 3 && column < 3) {
+
+    //     square = 0;
+
+    // }
+    // else if (row < 3 && column > 2 && column < 6) {
+
+    //     square = 1;
+
+    // }
+    // else if (row < 3 && column > 5) {
+
+    //     square = 2;
+
+    // }
+    // else if (row > 2 && row < 6 && column < 3) {
+
+    //     square = 3;
+
+    // }
+    // else if (row > 2 && row < 6 && column > 2 && column < 6) {
+
+    //     square = 4;
+
+    // }
+    // else if (row > 2 && row < 6 && column > 5) {
+
+    //     square = 5;
+
+    // }
+    // else if (row > 5 && column < 3) {
+
+    //     square = 6;
+
+    // }
+    // else if (row > 5 && column > 2 && column < 6) {
+
+    //     square = 7;
+
+    // }
+    // else if (row > 5 && column > 5) {
+
+    //     square = 8;
+
+    // };
+    squareMatrix = [[1, 1, 1, 2, 2, 2, 3, 3, 3], [1, 1, 1, 2, 2, 2, 3, 3, 3], [1, 1, 1, 2, 2, 2, 3, 3, 3], [4, 4, 4, 5, 5, 5, 6, 6, 6], [4, 4, 4, 5, 5, 5, 6, 6, 6], [4, 4, 4, 5, 5, 5, 6, 6, 6], [7, 7, 7, 8, 8, 8, 9, 9, 9], [7, 7, 7, 8, 8, 8, 9, 9, 9], [7, 7, 7, 8, 8, 8, 9, 9, 9]];
+    return squareMatrix[row][column];
+};
+
+//check the 3x3 square to see if num is present. return true if present
+function checkSquare(square, num) {
+    counter = 0;
+    //Define the square indeces for the square we are searching
+    //#region
+    if (square === 1) {
+
+        squareIndex = [0,1,2,9,10,11,18,19,20];
+
+    }
+    if (square === 2) {
+
+        squareIndex = [3,4,5,12,13,14,21,22,23];
+
+    }
+    if (square === 3) {
+
+        squareIndex = [6,7,8,15,16,17,24,25,26];
+
+    }
+    if (square === 4) {
+
+        squareIndex = [27,28,29,36,37,38,45,46,47];
+
+    }
+    if (square === 5) {
+
+        squareIndex = [30,31,32,39,40,41,48,49,50];
+
+    }
+    if (square === 6) {
+
+        squareIndex = [33,34,35,42,43,44,51,52,53];
+
+    }
+    if (square === 7) {
+
+        squareIndex = [54,55,56,63,54,65,72,73,74];
+
+    }
+    if (square === 8) {
+
+        squareIndex = [57,58,59,66,67,68,75,76,77];
+
+    }
+    if (square === 9) {
+
+        squareIndex = [60,61,62,69,70,71,78,79,80];
+
+    }
+    //#endregion
+    
+    //Search through the square to see if the number of interest matches any number in the square
+    for (let j = 0; j < 9; j++){
+        // console.log(gameLayout[squareIndex[j]], num);
+        if (gameLayout[squareIndex[j]] === num) {
+
+            return true;
+    
+        }
+        counter = counter + 1;
+        // console.log('counter', counter);
+
+    };
+    //If we search through all squares and haven't yet returned true, return false
+    
+    if (counter === 9) {
+        // console.log(counter)
+        return false;
+
+    }
+    
+
+    
+}
