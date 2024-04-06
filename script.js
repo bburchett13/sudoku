@@ -16,7 +16,7 @@ gameLayout = [7, 1, 4, 6, 8, 2, '', 5, '', '', 5, '', 9, 1, 7, 4, 8, 2, '', '', 
 
 // gameLayout = [1, '', '', '', '', 3, 5, '', 6, '', '', '', '', '', '', 8, '', 7, '', 5, '', 6, '', '', '', '', '', '', '', 6, '', '', 7, '', '', 8, '', '', 8, '', 6, '', 2, '', '', 4, '', '', 9, '', '', 6, '', '', '', '', '', '', '', 4, '', 2, '', 2, '', 4, '', '', '', '', '', '', 9, '', 7, 5, '', '', '', '', 3];
 
-let answer = [];
+let answer = gameLayout;
 // var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 let numberButtons = document.getElementsByClassName('numberButton');
 let hints = document.getElementById("playerHints");
@@ -147,7 +147,7 @@ btnHints.addEventListener('click', () => {
 
 
     };
-    colorCells(gameLayout, answer, playableCells, playerHintsON)
+    colorCells(gameCells, answer, playableCells, playerHintsON)
 });
 
 
@@ -159,14 +159,14 @@ solveBtn.addEventListener('click', () => {
         gameCells[i].innerHTML = answer[i];
 
     };
-
+    colorCells(gameCells,answer,playableCells,playerHintsON);
 });
 
 let makeBtn = document.querySelector("#makePuzzle");
 makeBtn.addEventListener('click', () => {
 
     makeGame(gameLayout);
-    answer = solve(gameLayout, playableCells);
+    answer = solve(answer, playableCells);
 
 });
 //#endregion
@@ -265,7 +265,7 @@ function colorCell(index, color, playerHintsON) {
     
 }
 
-function colorCells(gameLayout, answer, playableCells, playerHintsON){
+function colorCells(gameCells, answer, playableCells, playerHintsON){
 
     if (playerHintsON) {
 
@@ -383,7 +383,7 @@ function checkIfValid(gameArray, num, index) {
  
     };
     //check square
-    if (checkSquare(square, num)) {
+    if (checkSquare(gameArray, square, num)) {
 
         console.log(checkSquare('square', testNum));
         return false;
@@ -401,7 +401,7 @@ function findSquare(row, column) {
 };
 
 //check the 3x3 square to see if num is present. return true if present
-function checkSquare(square, num) {
+function checkSquare(gameLayout, square, num) {
     counter = 0;
     //Define the square indeces for the square we are searching
     //#region
