@@ -166,7 +166,6 @@ makeBtn.addEventListener('click', () => {
 
     makeGame(gameLayout);
     answer = solve(gameLayout, playableCells);
-    // console.log(answer);
 
 });
 //#endregion
@@ -274,20 +273,9 @@ function solve(gameBoard, playableCells) {
     solvingIndex = 0;
     testNum = 1;
     while (!solved) {
-        // if (counter2 > 10000){
-        //     console.log('max Solving Index: ', maxSolvingIndex, 'length of playable cells', playableCells.length)
-        //     break;
-
-        // }
-        if (counter2 === 30) {
-
-            console.log('whoa');
-
-        }
         if (checkIfValid(answer, testNum, playableCells[solvingIndex])) {
 
             answer[playableCells[solvingIndex]] = testNum;
-            // console.log(answer[playableCells[solvingIndex]]);
 
             solvingIndex = solvingIndex + 1;
             if (solvingIndex > maxSolvingIndex) {
@@ -296,7 +284,6 @@ function solve(gameBoard, playableCells) {
 
             }
             testNum = 1;
-            // console.log(playableCells[solvingIndex]);
 
             if (solvingIndex > playableCells.length-1) {
 
@@ -311,20 +298,11 @@ function solve(gameBoard, playableCells) {
 
         }
         if (testNum > 9) {
-
-            console.log('testNum', testNum, 'solvingIndex', solvingIndex);
             while (testNum > 9) {
-
                 if (solvingIndex === 1) {
 
                     answer[playableCells[solvingIndex]] = '';
                     solvingIndex = 0;
-
-                }
-                else if (solvingIndex === 0) {
-
-                    console.log("this won't work")
-                    break;
 
                 }
                 else {
@@ -335,8 +313,6 @@ function solve(gameBoard, playableCells) {
                 }
 
                 testNum = answer[playableCells[solvingIndex]] + 1;
-                console.log('testNum', testNum, 'solving index', solvingIndex);
-
                 if (solvingIndex < 0) {
 
                     console.log('impossible');
@@ -347,8 +323,6 @@ function solve(gameBoard, playableCells) {
             }
             
             counter2++;
-            console.log('resets: ', counter2)
-
 
         };
     };
@@ -359,10 +333,8 @@ function checkIfValid(gameArray, num, index) {
     row = Math.floor(index/9);
     column = index % 9;
     square = findSquare(row,column);
-    // console.log('location', row, column, square);
 
     for (i = 0; i < 9; i++){
-        // console.log(i, column, gameArray[i][column]);
         //check row
         if (gameArray[i+(row*9)] === num) {
         // if (gameArray[row][i] === num) {
@@ -395,52 +367,6 @@ function checkIfValid(gameArray, num, index) {
 
 // function to find the 3x3 square that the selected cell is in 
 function findSquare(row, column) {
-
-    // if (row < 3 && column < 3) {
-
-    //     square = 0;
-
-    // }
-    // else if (row < 3 && column > 2 && column < 6) {
-
-    //     square = 1;
-
-    // }
-    // else if (row < 3 && column > 5) {
-
-    //     square = 2;
-
-    // }
-    // else if (row > 2 && row < 6 && column < 3) {
-
-    //     square = 3;
-
-    // }
-    // else if (row > 2 && row < 6 && column > 2 && column < 6) {
-
-    //     square = 4;
-
-    // }
-    // else if (row > 2 && row < 6 && column > 5) {
-
-    //     square = 5;
-
-    // }
-    // else if (row > 5 && column < 3) {
-
-    //     square = 6;
-
-    // }
-    // else if (row > 5 && column > 2 && column < 6) {
-
-    //     square = 7;
-
-    // }
-    // else if (row > 5 && column > 5) {
-
-    //     square = 8;
-
-    // };
     squareMatrix = [[1, 1, 1, 2, 2, 2, 3, 3, 3], [1, 1, 1, 2, 2, 2, 3, 3, 3], [1, 1, 1, 2, 2, 2, 3, 3, 3], [4, 4, 4, 5, 5, 5, 6, 6, 6], [4, 4, 4, 5, 5, 5, 6, 6, 6], [4, 4, 4, 5, 5, 5, 6, 6, 6], [7, 7, 7, 8, 8, 8, 9, 9, 9], [7, 7, 7, 8, 8, 8, 9, 9, 9], [7, 7, 7, 8, 8, 8, 9, 9, 9]];
     return squareMatrix[row][column];
 };
@@ -499,24 +425,19 @@ function checkSquare(square, num) {
     
     //Search through the square to see if the number of interest matches any number in the square
     for (let j = 0; j < 9; j++){
-        // console.log(gameLayout[squareIndex[j]], num);
         if (gameLayout[squareIndex[j]] === num) {
 
             return true;
     
         }
         counter = counter + 1;
-        // console.log('counter', counter);
 
     };
     //If we search through all squares and haven't yet returned true, return false
     
     if (counter === 9) {
-        // console.log(counter)
         return false;
 
     }
-    
-
-    
+       
 }
