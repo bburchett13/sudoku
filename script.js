@@ -3,6 +3,7 @@ let gameCells = [];
 let gameLayout = [];
 let playableCells = [];
 let hintCells = [];
+let answer = [];
 let playerHintsON = false;
 let solved = false;
 let counter = 0;
@@ -232,10 +233,17 @@ function resetNumButtons(oldNum, num) {
 // Create buttons for each cell and provide game logic
 function makeGame(gameLayout) {
     playableCells = [];
+    gameCells = [];
     for (let i = 0; i < gameLayout.length; i++) {
+
     
         // Find game cell
         gameCells[i] = document.getElementsByClassName('gameCell')[i];
+        if (gameCells[i].classList.contains('playable')) {
+
+            gameCells[i].classList.toggle('playable');
+
+        }
         
         // create game board using the gameLayout
         gameCells[i].innerHTML = gameLayout[i];
@@ -244,14 +252,14 @@ function makeGame(gameLayout) {
         // If statement to create button for playable cells and decide what to do when the user puts a number in place
         if (gameLayout[i] === '') {
     
-            gameCells[i].classList.add = 'playableCell';
+            gameCells[i].classList.toggle('playable');
             playableCells.push(i);
             colorCell(i, 'white', playerHintsON);
             // gameCells[i].style.backgroundColor = 'white';
-            gameCells[i].addEventListener('click', () => {
+            gameCells[i].addEventListener('click', function gameCellPlay() {
         
                 gameCells[i].innerHTML = selectedNum;
-    
+
                 // if wrong, make cell red, if erase, make cell white, if correct, make cell green
                 if (selectedNum !== answer[i] && selectedNum !== '') {
     
@@ -405,7 +413,7 @@ function checkIfValid(gameArray, num, index) {
         if (gameArray[i+(row*9)] === num) {
         // if (gameArray[row][i] === num) {
 
-            console.log('row', testNum);
+            // console.log('row', testNum);
             return false;
 
         }
@@ -413,7 +421,7 @@ function checkIfValid(gameArray, num, index) {
         if (gameArray[column + (i*9)] === num) {
         // if (gameArray[i][column] === num) {
 
-            console.log('column', testNum);
+            // console.log('column', testNum);
             return false;
 
         }
@@ -422,7 +430,7 @@ function checkIfValid(gameArray, num, index) {
     //check square
     if (checkSquare(gameArray, square, num)) {
 
-        console.log(checkSquare('square', testNum));
+        // console.log(checkSquare('square', testNum));
         return false;
 
     }
