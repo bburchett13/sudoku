@@ -16,7 +16,9 @@ gameLayout = [7, 1, 4, 6, 8, 2, '', 5, '', '', 5, '', 9, 1, 7, 4, 8, 2, '', '', 
 
 // gameLayout = [1, '', '', '', '', 3, 5, '', 6, '', '', '', '', '', '', 8, '', 7, '', 5, '', 6, '', '', '', '', '', '', '', 6, '', '', 7, '', '', 8, '', '', 8, '', 6, '', 2, '', '', 4, '', '', 9, '', '', 6, '', '', '', '', '', '', '', 4, '', 2, '', 2, '', 4, '', '', '', '', '', '', 9, '', 7, 5, '', '', '', '', 3];
 
-let answer = gameLayout;
+// let answer = gameLayout.slice(0);
+// console.log(answer);
+// let answer2 = gameLayout;
 // var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 let numberButtons = document.getElementsByClassName('numberButton');
 let hints = document.getElementById("playerHints");
@@ -166,6 +168,7 @@ let makeBtn = document.querySelector("#makePuzzle");
 makeBtn.addEventListener('click', () => {
 
     makeGame(gameLayout);
+    answer = gameLayout.slice(0);
     answer = solve(answer, playableCells);
 
 });
@@ -201,7 +204,7 @@ function resetNumButtons(oldNum, num) {
 
 // Create buttons for each cell and provide game logic
 function makeGame(gameLayout) {
-
+    playableCells = [];
     for (let i = 0; i < gameLayout.length; i++) {
     
         // Find game cell
@@ -311,6 +314,7 @@ function solve(gameBoard, playableCells) {
     let maxSolvingIndex = 0;
     solvingIndex = 0;
     testNum = 1;
+    solved = false;
     while (!solved) {
         if (checkIfValid(answer, testNum, playableCells[solvingIndex])) {
 
@@ -469,4 +473,5 @@ function checkSquare(gameLayout, square, num) {
 
     }
        
-}
+};
+
