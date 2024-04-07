@@ -8,24 +8,20 @@ let solved = false;
 let counter = 0;
 let counter2 = 0;
 
-//These are my 3 game layout test cases
-gameLayout = [7, 1, 4, 6, 8, 2, '', 5, '', '', 5, '', 9, 1, 7, 4, 8, 2, '', '', 2, '', '', 5, 1, '', 7, '', 4, 9, 2, 7, '', 5, 3, '', 6, '', 7, '', 9, 8, 2, 1, '', 8, '', '', '', '', '', 6, '', '', '', '', '', 3, '', '', 8, 9, '', 5, '', '', '', '', '', 3, '', '', 4, '', 3, 8, '', '', '', '', 1];
+gameLayout = [7, 1, 4, 6, 8, 2, 9, 5, 3, 3, 5, 6, 9, 1, 7, 4, 8, 2, 9, 8, 2, 4, 3, 5, 1, 6, 7, 1, 4, 9, 2, 7, 6, 5, 3, 8, 6, 3, 7, 5, 9, 8, 2, 1, 4, 8, 2, 5, 1, 4, 3, 6, 7, 9, 2, 7, 1, 3, 6, 4, 8, 9, 5, 5, 9, 8, 7, 2, 1, 3, 4, 6, 4, 6, 3, 8, 5, 9, 7, 2, 1];
 
-//This game layout should take ~6,000 iterations
-// gameLayout = ['', '', '', '', '', 9, '', 5, '', 6, '', 8, '', '', '', 9, '', '', '', 5, 9, '', 8, '', 3, 6, '', '', '', '', 1, '', 2, '', '', '', 2, '', '', '', 4, '', '', '', 1, '', '', '', 7, '', 3, '', '', '', '', 2, 6, '', 5, '', 7, 3, '', '', '', 4, '', '', '', 5, '', 8, '', 9, '', 8, '', '', '', '', ''];
-
-// gameLayout = [1, '', '', '', '', 3, 5, '', 6, '', '', '', '', '', '', 8, '', 7, '', 5, '', 6, '', '', '', '', '', '', '', 6, '', '', 7, '', '', 8, '', '', 8, '', 6, '', 2, '', '', 4, '', '', 9, '', '', 6, '', '', '', '', '', '', '', 4, '', 2, '', 2, '', 4, '', '', '', '', '', '', 9, '', 7, 5, '', '', '', '', 3];
-
-// let answer = gameLayout.slice(0);
-// console.log(answer);
-// let answer2 = gameLayout;
-// var answer = [5, 3, 4, 6, 7, 8, 9, 1, 2, 6, 7, 2, 1, 9, 5, 3, 4, 8, 1, 9, 8, 3, 4, 2, 5, 6, 7, 8, 5, 9, 7, 6, 1, 4, 2, 3, 4, 2, 6, 8, 5, 3, 7, 9, 1, 7, 1, 3, 9, 2, 4, 8, 5, 6, 9, 6, 1, 5, 3, 7, 2, 8, 4, 2, 8, 7, 4, 1, 9, 6, 3, 5, 3, 4, 5, 2, 8, 6, 1, 7, 9];
 let numberButtons = document.getElementsByClassName('numberButton');
 let hints = document.getElementById("playerHints");
+let easy = document.getElementById("easy");
+easy.style.borderColor = 'red';
+let medium = document.getElementById("medium");
+let hard = document.getElementById("hard");
 let row;
 let column;
 let square;
 let squareIndex;
+let blanks = [];
+let difficulty = 'easy';
 
 //Number Buttons
 //#region
@@ -167,9 +163,40 @@ solveBtn.addEventListener('click', () => {
 let makeBtn = document.querySelector("#makePuzzle");
 makeBtn.addEventListener('click', () => {
 
-    makeGame(gameLayout);
-    answer = gameLayout.slice(0);
+    blanks = puzzleGenerator(gameLayout, difficulty);
+    makeGame(blanks);
+    answer = blanks.slice(0);
     answer = solve(answer, playableCells);
+
+});
+
+let easyBtn = document.querySelector('#easy');
+easyBtn.addEventListener('click', () => {
+
+    difficulty = 'easy';
+    easy.style.borderColor = 'red';
+    medium.style.borderColor = 'black';
+    hard.style.borderColor = 'black';
+
+});
+
+let mediumBtn = document.querySelector('#medium');
+mediumBtn.addEventListener('click', () => {
+
+    difficulty = 'medium';
+    easy.style.borderColor = 'black';
+    medium.style.borderColor = 'red';
+    hard.style.borderColor = 'black';
+
+});
+
+let hardBtn = document.querySelector('#hard');
+hardBtn.addEventListener('click', () => {
+
+    difficulty = 'hard';
+    easy.style.borderColor = 'black';
+    medium.style.borderColor = 'black';
+    hard.style.borderColor = 'red';
 
 });
 //#endregion
@@ -212,6 +239,7 @@ function makeGame(gameLayout) {
         
         // create game board using the gameLayout
         gameCells[i].innerHTML = gameLayout[i];
+        gameCells[i].style.backgroundColor = 'tan';
     
         // If statement to create button for playable cells and decide what to do when the user puts a number in place
         if (gameLayout[i] === '') {
@@ -475,3 +503,65 @@ function checkSquare(gameLayout, square, num) {
        
 };
 
+let newNum;
+let numOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let loopCount;
+let numCells = 40;
+function puzzleGenerator(gameLayout, difficulty) {
+
+    if (difficulty === 'easy'){
+
+        numCells = Math.floor(Math.random() * 10 + 40);
+
+    }
+    else if (difficulty === 'medium'){
+
+        numCells = Math.floor(Math.random() * 10 + 30);
+
+    }
+    else if (difficulty === 'hard'){
+
+        numCells = Math.floor(Math.random() * 7 + 19);
+
+    };
+
+    blanks = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    playableCells = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
+    playableCells = shuffle(playableCells);
+    playableCells.splice(0, numCells);
+
+
+
+    numOrder = shuffle(numOrder);
+
+    for (let i = 0; i < gameLayout.length; i++){
+
+        blanks[i] = numOrder[gameLayout[i]-1];
+
+    }
+    for (let i =0; i < playableCells.length; i++){
+
+        blanks[playableCells[i]] = '';
+
+    };
+    return blanks;
+};
+
+function shuffle(array) {
+    var i = array.length,
+        j = 0,
+        temp;
+
+    while (i--) {
+
+        j = Math.floor(Math.random() * (i+1));
+
+        // swap randomly chosen element with current element
+        temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+
+    }
+
+    return array;
+}
