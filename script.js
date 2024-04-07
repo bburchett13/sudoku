@@ -280,6 +280,7 @@ function makeGame(gameLayout) {
 
 };
 
+//check if hints are on and color cells as changes are made
 function colorCell(index, color, playerHintsON) {
     if (playerHintsON) {
 
@@ -296,6 +297,7 @@ function colorCell(index, color, playerHintsON) {
     
 }
 
+//if hints is toggled, color all cells as needed
 function colorCells(gameCells, answer, playableCells, playerHintsON){
 
     if (playerHintsON) {
@@ -337,6 +339,8 @@ function colorCells(gameCells, answer, playableCells, playerHintsON){
 let solvingIndex;
 let testNum;
 let solvedCells = [];
+
+//solve the gameboard after a puzzle has been generated
 function solve(gameBoard, playableCells) {
     answer = gameBoard;
     let maxSolvingIndex = 0;
@@ -389,6 +393,7 @@ function solve(gameBoard, playableCells) {
     };
 };
 
+//check if a number is valid when put in. Needed for the 'solve' function
 function checkIfValid(gameArray, num, index) {
 
     row = Math.floor(index/9);
@@ -507,6 +512,8 @@ let newNum;
 let numOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let loopCount;
 let numCells = 40;
+
+//function to generate the puzzle. starts with solved puzzle, randomly generates playable cells based on difficulty, maps numbers to new numbers to make puzzle unique
 function puzzleGenerator(gameLayout, difficulty) {
 
     if (difficulty === 'easy'){
@@ -547,6 +554,7 @@ function puzzleGenerator(gameLayout, difficulty) {
     return blanks;
 };
 
+//fisher-yates shuffle algorithm. 
 function shuffle(array) {
     var i = array.length,
         j = 0,
