@@ -239,11 +239,7 @@ function makeGame(gameLayout) {
     
         // Find game cell
         gameCells[i] = document.getElementsByClassName('gameCell')[i];
-        if (gameCells[i].classList.contains('playable')) {
 
-            gameCells[i].classList.toggle('playable');
-
-        }
         
         // create game board using the gameLayout
         gameCells[i].innerHTML = gameLayout[i];
@@ -252,41 +248,53 @@ function makeGame(gameLayout) {
         // If statement to create button for playable cells and decide what to do when the user puts a number in place
         if (gameLayout[i] === '') {
     
-            gameCells[i].classList.toggle('playable');
             playableCells.push(i);
             colorCell(i, 'white', playerHintsON);
             // gameCells[i].style.backgroundColor = 'white';
-            gameCells[i].addEventListener('click', function gameCellPlay() {
-        
-                gameCells[i].innerHTML = selectedNum;
+            if (!gameCells[i].classList.contains('listener')) {
+                gameCells[i].classList.add('listener');
+                gameCells[i].addEventListener('click', function gameCellPlay() {
+                    
+                    if (gameCells[i].classList.contains('listener')) {
 
-                // if wrong, make cell red, if erase, make cell white, if correct, make cell green
-                if (selectedNum !== answer[i] && selectedNum !== '') {
-    
-                    colorCell(i, 'red', playerHintsON);
-                    // gameCells[i].style.backgroundColor = 'red';
-    
-                }
-                else if (selectedNum === '') {
-    
-                    colorCell(i, 'white', playerHintsON);
-                    // gameCells[i].style.backgroundColor = 'white';
-    
-                }
-                else {
-    
-                    colorCell(i, 'green', playerHintsON);
-                    // gameCells[i].style.backgroundColor = 'green';
-    
-                }
-        
-            });
+                        gameCells[i].innerHTML = selectedNum;
+
+                        // if wrong, make cell red, if erase, make cell white, if correct, make cell green
+                        if (selectedNum !== answer[i] && selectedNum !== '') {
+            
+                            colorCell(i, 'red', playerHintsON);
+                            // gameCells[i].style.backgroundColor = 'red';
+            
+                        }
+                        else if (selectedNum === '') {
+            
+                            colorCell(i, 'white', playerHintsON);
+                            // gameCells[i].style.backgroundColor = 'white';
+            
+                        }
+                        else {
+            
+                            colorCell(i, 'green', playerHintsON);
+                            // gameCells[i].style.backgroundColor = 'green';
+            
+                        };
+
+                    };
+                    
+                });
+            };
     
         };
-        
+        if (gameLayout[i] !== '' && gameCells[i].classList.contains('listener')) {
+            console.log(gameCells[i].classList, i);
+            gameCells[i].classList.remove('listener');
+            // gameCells[i].removeEventListener('click', gameCellPlay);
+
+        };
     };
 
 };
+
 
 //check if hints are on and color cells as changes are made
 function colorCell(index, color, playerHintsON) {
